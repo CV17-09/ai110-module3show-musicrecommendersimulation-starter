@@ -17,17 +17,77 @@ Replace this paragraph with your own summary of what your version does.
 
 ## How The System Works
 
-Explain your design in plain language.
+My system is a simple content-based music recommender. That means it recommends songs by comparing the features of each song to the user’s preferences. Instead of using other users’ behavior, it focuses on the song’s own attributes, such as its genre, mood, energy, and tempo, to find songs with a similar vibe.
 
-Some prompts to answer:
+What features each Song uses
 
-- What features does each `Song` use in your system
-  - For example: genre, mood, energy, tempo
-- What information does your `UserProfile` store
-- How does your `Recommender` compute a score for each song
-- How do you choose which songs to recommend
+Each Song in my system stores information that describes what the song feels like and sounds like. The features I use are:
 
-You can include a simple diagram or bullet list if helpful.
+id
+title
+artist
+genre
+mood
+energy
+tempo_bpm
+valence
+danceability
+acousticness
+
+The most important recommendation features are genre, mood, energy, tempo_bpm, and valence, because these help define the overall vibe of a song.
+
+What information the UserProfile stores
+
+The UserProfile stores the user’s preferred music vibe. It keeps the values the system will compare against each song. These include:
+
+preferred_genre
+preferred_mood
+preferred_energy
+preferred_tempo_bpm
+preferred_valence
+preferred_danceability
+preferred_acousticness
+
+This gives the system a target to match when looking through the songs.
+
+How the Recommender computes a score
+
+The Recommender checks each song one at a time and gives it a score based on how closely it matches the user’s preferences.
+
+It works like this:
+
+If the song’s genre matches the user’s preferred genre, it gets points.
+If the song’s mood matches the user’s preferred mood, it gets points.
+For number-based features like energy, tempo, valence, danceability, and acousticness, the recommender checks how close the song is to the user’s preferred value.
+The closer the song is, the higher the score.
+
+Some features can be weighted more than others. For example, genre and mood may be worth more than danceability if I decide those matter more for defining the user’s vibe.
+
+How I choose which songs to recommend
+
+After the system scores every song, it sorts them from highest score to lowest score. The songs with the highest scores are the ones that best match the user’s preferences, so those are the songs the system recommends.
+
+Simple flow
+
+UserProfile preferences
+→ compare against each Song
+→ calculate a score
+→ rank all songs
+→ recommend the top matches
+
+Diagram: 
+
+UserProfile (preferences)
+        ↓
+Compare with each Song
+        ↓
+Calculate similarity score
+        ↓
+Store all scores
+        ↓
+Sort songs (highest → lowest)
+        ↓
+Top N songs = Recommendations
 
 ---
 
