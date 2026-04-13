@@ -17,77 +17,30 @@ Replace this paragraph with your own summary of what your version does.
 
 ## How The System Works
 
-My system is a simple content-based music recommender. That means it recommends songs by comparing the features of each song to the user’s preferences. Instead of using other users’ behavior, it focuses on the song’s own attributes, such as its genre, mood, energy, and tempo, to find songs with a similar vibe.
+### Algorithm Recipe
 
-What features each Song uses
+Each song starts with a score of 0. The system then assigns points based on how well the song matches the user’s preferences:
 
-Each Song in my system stores information that describes what the song feels like and sounds like. The features I use are:
+- +2.0 points if the song’s genre matches the user’s preferred genres  
+- +1.0 point if the song’s mood matches the user’s preferred moods  
 
-id
-title
-artist
-genre
-mood
-energy
-tempo_bpm
-valence
-danceability
-acousticness
+The system also adds similarity points based on how close the song’s numeric features are to the user’s target values:
 
-The most important recommendation features are genre, mood, energy, tempo_bpm, and valence, because these help define the overall vibe of a song.
+- Energy: up to +1.5 points  
+- Tempo (BPM): up to +1.0 point  
+- Valence: up to +1.0 point  
+- Danceability: up to +1.0 point  
+- Acousticness: up to +0.5 point  
 
-What information the UserProfile stores
+The closer the song’s values are to the user’s targets, the more points it receives.
 
-The UserProfile stores the user’s preferred music vibe. It keeps the values the system will compare against each song. These include:
+After scoring all songs, the system sorts them from highest to lowest score and recommends the top matches.
 
-preferred_genre
-preferred_mood
-preferred_energy
-preferred_tempo_bpm
-preferred_valence
-preferred_danceability
-preferred_acousticness
+### Potential Biases
 
-This gives the system a target to match when looking through the songs.
+This system may over-prioritize genre because it has the highest weight in the scoring system. As a result, it might ignore songs from different genres that still match the user’s mood or overall vibe.
 
-How the Recommender computes a score
-
-The Recommender checks each song one at a time and gives it a score based on how closely it matches the user’s preferences.
-
-It works like this:
-
-If the song’s genre matches the user’s preferred genre, it gets points.
-If the song’s mood matches the user’s preferred mood, it gets points.
-For number-based features like energy, tempo, valence, danceability, and acousticness, the recommender checks how close the song is to the user’s preferred value.
-The closer the song is, the higher the score.
-
-Some features can be weighted more than others. For example, genre and mood may be worth more than danceability if I decide those matter more for defining the user’s vibe.
-
-How I choose which songs to recommend
-
-After the system scores every song, it sorts them from highest score to lowest score. The songs with the highest scores are the ones that best match the user’s preferences, so those are the songs the system recommends.
-
-Simple flow
-
-UserProfile preferences
-→ compare against each Song
-→ calculate a score
-→ rank all songs
-→ recommend the top matches
-
-Diagram: 
-
-UserProfile (preferences)
-        ↓
-Compare with each Song
-        ↓
-Calculate similarity score
-        ↓
-Store all scores
-        ↓
-Sort songs (highest → lowest)
-        ↓
-Top N songs = Recommendations
+Additionally, the system uses fixed weights for all users, which means it assumes everyone values features like genre and energy the same way. This could limit personalization and reduce recommendation diversity.
 
 ---
 
@@ -269,3 +222,10 @@ A few sentences about what you learned:
 - How did building this change how you think about real music recommenders
 - Where do you think human judgment still matters, even if the model seems "smart"
 
+## CLI Verification
+
+Here is a screenshot of the terminal output showing the top recommendations:
+
+![CLI Output](cli_output.png)
+
+![CLI Output](cli_output2.png)
