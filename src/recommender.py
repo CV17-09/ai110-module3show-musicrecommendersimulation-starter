@@ -130,7 +130,7 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, str]:
 
     # Genre match
     if song["genre"] in user_prefs["preferred_genres"]:
-        score += 30
+        score += 15
         reasons.append("genre match")
 
     # Mood match
@@ -140,16 +140,16 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, str]:
 
     # Numeric features
     numerics = {
-        "energy": (song["energy"], user_prefs["target_energy"]),
-        "norm_tempo": (norm_tempo_song, norm_tempo_target),
-        "valence": (song["valence"], user_prefs["target_valence"]),
-        "danceability": (song["danceability"], user_prefs["target_danceability"]),
-        "acousticness": (song["acousticness"], user_prefs["target_acousticness"])
+        "energy": (song["energy"], user_prefs["target_energy"], 20),  # Doubled weight
+        "norm_tempo": (norm_tempo_song, norm_tempo_target, 10),
+        "valence": (song["valence"], user_prefs["target_valence"], 10),
+        "danceability": (song["danceability"], user_prefs["target_danceability"], 10),
+        "acousticness": (song["acousticness"], user_prefs["target_acousticness"], 10)
     }
 
-    for feature, (song_val, target_val) in numerics.items():
+    for feature, (song_val, target_val, weight) in numerics.items():
         closeness = 1 - abs(song_val - target_val)
-        points = 10 * closeness
+        points = weight * closeness
         score += points
         if closeness > 0.8:
             reasons.append(f"{feature} is close to your preference")
